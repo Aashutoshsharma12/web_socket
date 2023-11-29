@@ -1,34 +1,42 @@
+<!-- public/index.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>WebSocket Example</title>
+  <title>WebSocket Chat</title>
 </head>
 <body>
-  <h1>WebSocket Example</h1>
+  <input type="text" id="roomInput" placeholder="Enter room name">
+  <button onclick="joinRoom()">Join Room</button>
+
   <input type="text" id="messageInput" placeholder="Type a message">
-  <button onclick="sendMessage()">Send Message</button>
-  <div id="result"></div>
+  <button onclick="sendMessage()">Send</button>
+
+  <ul id="messageList"></ul>
 
   <script>
-    // Create a WebSocket connection
     const socket = new WebSocket('ws://localhost:30010');
 
-    // Listen for messages from the server
-    socket.addEventListener('message', (event) => {
-      document.getElementById('result').innerHTML = event.data;
-    });
+    socket.onmessage = (event) => {
+      const messageList = document.getElementById('messageList');
+      const li = document.createElement('li');
+      li.textContent = event.data;
+      messageList.appendChild(li);
+    };
 
-    // Function to send a message to the server
+    function joinRoom() {
+      const roomInput = document.getElementById('roomInput');
+      const room = roomInput.value;
+      socket.send(JSON.stringify({ type: 'join', room }));
+    }
+
     function sendMessage() {
       const messageInput = document.getElementById('messageInput');
       const message = messageInput.value;
-
-      // Send the message to the server
-      socket.send(message);
-
-      // Clear the input field
+      const roomInput = document.getElementById('roomInput');
+      const room = roomInput.value;
+      socket.send(JSON.stringify({ type: 'message', room, message }));
       messageInput.value = '';
     }
   </script>
