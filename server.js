@@ -117,8 +117,8 @@ wss.on('connection', (ws) => {
                 const roomClients = clients.get(data.room);
                 if (roomClients) {
                     roomClients.forEach((client) => {
-                        client.send('data.message');
-                        console.log('data.message',"sending-----")
+                        client.send(data.message);
+                        console.log(data.message,"sending-----")
                     });
                 }
                 break;
