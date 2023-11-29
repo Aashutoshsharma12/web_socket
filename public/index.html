@@ -16,7 +16,7 @@
   <ul id="messageList"></ul>
 
   <script>
-    const socket = new WebSocket('ws://localhost:30010');
+    const socket = new WebSocket('ws://https://web-socket-gkix.vercel.app');
 
     socket.onmessage = (event) => {
       const messageList = document.getElementById('messageList');
